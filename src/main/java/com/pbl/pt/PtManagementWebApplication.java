@@ -1,4 +1,4 @@
-package com.pbl.pt.pt_management_web;
+package com.pbl.pt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

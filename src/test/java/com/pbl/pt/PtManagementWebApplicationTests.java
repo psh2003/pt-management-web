@@ -1,4 +1,4 @@
-package com.pbl.pt.pt_management_web;
+package com.pbl.pt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
