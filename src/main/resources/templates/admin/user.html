@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/admin/header :: header"></th:block>
+<body id="page-top">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script th:inline="javascript">
+    let userId;
+    function getGroupList(id) {
+        userId = id;
+        $.ajax({
+            type: 'post'
+            ,url: '/admin/get-groups'
+            ,data: {id: id}
+        })
+        .done(function (fragment) {
+            $('#dataTable2').replaceWith(fragment);
+        })
+    }
+
+    function addGroup() {
+        if (!!!userId || !!!$('#groupSelect').val()) {
+            return false;
+        }
+        $.ajax({
+            type: 'post'
+            ,url: '/admin/add-user-group'
+            ,data: JSON.stringify({userGroupId: $('#groupSelect').val(), userId: userId})
+            ,contentType: 'application/json; charset=utf-8'
+        })
+        .done(function (fragment) {
+            $('#dataTable2').replaceWith(fragment);
+        })
+    }
+</script>
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <th:block th:replace="/admin/sidebar :: sidebar"></th:block>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <th:block th:replace="/admin/topbar :: topbar"></th:block>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h1 class="h3 mb-1 text-gray-800">Users</h1>
+                <p class="mb-4">유저를 등록하고 그룹을 지정할 수 있습니다.</p>
+                <!-- Content Row -->
+                <div class="row">
+                    <!-- Grow In Utility -->
+                    <div class="col-lg-8">
+                        <div class="card position-relative">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">이용권 일괄 지급 목록</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>회원ID</th>
+                                            <th>회원명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="user : ${userList}">
+                                            <td th:text="${user.getUserId()}"></td>
+                                            <td><a href="#none" th:text="${user.getUserName()}" th:onclick="getGroupList([[${user.getUserId()}]])"></a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card position-relative full-height">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">그룹 지정</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="small mb-1">그룹</div>
+                                <form action="#" th:action="@{/admin/add-user-group}" th:object="${request}" method="post">
+                                    <select class="form-control mb-3" th:field="*{userGroupId}" th:onchange="addGroup()" id="groupSelect">
+                                        <option value="">추가할 회원 그룹을 선택해주세요.</option>
+                                        <option th:each="userGroupId : ${groupList}"
+                                                th:value="${userGroupId.getUserGroupId()}"
+                                                th:text="${userGroupId.getUserGroupName()}">
+                                        </option>
+                                    </select>
+                                </form>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                                        <tbody>
+                                        <tr th:each="group : ${groupList2}">
+                                            <td><a th:text="${group.getUserGroupName()}" onclick=""></a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card position-relative full-height mt-lg-5">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">유저 등록</h6>
+                            </div>
+                            <div class="card-body">
+                                <form action="#" th:action="@{/admin/add-user}" th:object="${userRequest}" method="post">
+                                    <div class="small mb-1">유저 이름</div>
+                                    <input class="form-control mb-5" type="text" placeholder="이름을 입력하세요." th:field="*{userName}"/>
+                                    <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></p>
+                                    <div class="d-flex align-items-end flex-column">
+                                        <input class="btn btn-primary" type="submit" value="+ 등록">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fade In Utility -->
+
+    </div>
+
+</div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<th:block th:replace="/admin/footer :: footer"></th:block>
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<th:block th:replace="/admin/script :: script"></th:block>
+
+</body>
+</html>
