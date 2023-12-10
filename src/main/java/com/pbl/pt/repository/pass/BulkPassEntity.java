@@ -1,11 +1,14 @@
 package com.pbl.pt.repository.pass;
 
+import com.pbl.pt.repository.userGroup.UserGroupEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +20,7 @@ public class BulkPassEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성을 DB에 위임합니다. (AUTO_INCREMENT)
     private Integer bulkPassSeq;
     private Integer packageSeq;
-    private String userGroupId;
+    private Long bulkPassUserGroupId;
 
     @Enumerated(EnumType.STRING)
     private BulkPassStatus status;
@@ -25,6 +28,10 @@ public class BulkPassEntity {
 
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bulkPassUserGroupId", insertable = false, updatable = false)
+    private UserGroupEntity userGroupEntity;
 
     public void setEndedAt(Integer period) {
         if (period == null) {

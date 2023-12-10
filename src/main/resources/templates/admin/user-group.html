@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="/admin/header :: header"></th:block>
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <th:block th:replace="/admin/sidebar :: sidebar"></th:block>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <th:block th:replace="/admin/topbar :: topbar"></th:block>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h1 class="h3 mb-1 text-gray-800">Groups</h1>
+                <p class="mb-4">유저 그룹을 등록할 수 있습니다.</p>
+                <!-- Content Row -->
+                <div class="row">
+                    <!-- Grow In Utility -->
+                    <div class="col-lg-8">
+                        <div class="card position-relative">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">그룹 목록</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                        <tr>
+                                            <th>회원 그룹명</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="group : ${groupList}">
+                                            <td th:text="${group.getUserGroupName()}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card position-relative full-height">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">그룹 등록</h6>
+                            </div>
+                            <div class="card-body">
+                                <form action="#" th:action="@{/admin/groups}" th:object="${request}" method="post">
+                                    <div class="small mb-1">그룹</div>
+                                    <input type="text" class="form-control mb-5" name="userGroupName" id="userGroupName" th:field="*{userGroupName}">
+                                    <div class="d-flex align-items-end flex-column">
+                                        <input class="btn btn-primary" type="submit" value="+ 등록">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fade In Utility -->
+
+    </div>
+
+</div>
+
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+<th:block th:replace="/admin/footer :: footer"></th:block>
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<th:block th:replace="/admin/script :: script"></th:block>
+
+</body>
+</html>

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:replace="/admin/header :: header"></th:block>
-<body id="page-top">
 <!-- Page Wrapper -->
 <div id="wrapper">
     <th:block th:replace="/admin/sidebar :: sidebar"></th:block>
@@ -28,7 +27,7 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                         <tr>
-                                            <th>회원 그룹 ID</th>
+                                            <th>회원 그룹</th>
                                             <th>상태</th>
                                             <th>횟수</th>
                                             <th>시작 일시</th>
@@ -37,7 +36,7 @@
                                         </thead>
                                         <tbody>
                                         <tr th:each="bulkPass : ${bulkPasses}" th:classappend="${bulkPass.getStatus().name() == 'COMPLETED' ? 'table-active' : ''}">
-                                            <td th:text="${bulkPass.getUserGroupId()}"></td>
+                                            <td th:text="${bulkPass.getUserGroupEntity().getUserGroupName()}"></td>
                                             <td th:if="${bulkPass.getStatus().name() == 'COMPLETED'}">지급 완료</td>
                                             <td th:unless="${bulkPass.getStatus().name() == 'COMPLETED'}">지급 전</td>
                                             <td th:text="${bulkPass.getCount()}"></td>
@@ -66,17 +65,18 @@
                                         </option>
                                     </select>
 
-                                    <div class="small mb-1">회원 그룹 ID</div>
-                                    <select class="form-control mb-3" th:field="*{userGroupId}">
+                                    <div class="small mb-1">회원 그룹</div>
+                                    <select class="form-control mb-3" th:field="*{bulkPassUserGroupId}">
                                         <option value="">등록된 회원 그룹을 선택해주세요.</option>
-                                        <option th:each="userGroupId : ${userGroupIds}"
-                                                th:value="${userGroupId}"
-                                                th:text="${userGroupId}">
+                                        <option th:each="userGroupId : ${groupList}"
+                                                th:value="${userGroupId.getUserGroupId()}"
+                                                th:text="${userGroupId.getUserGroupName()}">
                                         </option>
                                     </select>
 
                                     <div class="small mb-1">시작 일시</div>
-                                    <input class="form-control mb-5" type="text" placeholder="2022-09-01 00:00" th:field="*{startedAt}" />
+                                    <input class="form-control mb-5" type="text" placeholder="2022-09-01 00:00" th:field="*{startedAt}"/>
+                                    <p th:if="${#fields.hasErrors('startedAt')}" th:errors="*{startedAt}"></p>
                                     <div class="d-flex align-items-end flex-column">
                                         <input class="btn btn-primary" type="submit" value="+ 등록">
                                     </div>
